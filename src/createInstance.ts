@@ -15,21 +15,23 @@ let wss: WebSocket.WebSocketServer = null
 
 
 
-interface FunctionInTuringClinet<T = any> {
+interface FunctionInTuringClinet<T, R = any> {
 	(
+		args: T,
 		TURING?: Turing,
 		createDllBridge?: (dllPath: string) => void
-	): T
+	): R
 }
 interface CallbackData<T> {
 	type: string
 	result: T
 }
-export function execFunctionInTuringClient<T>(ws: WebSocket, cb: FunctionInTuringClinet<T>): Promise<T> {
+
+export function execFunctionInTuringClient<T, R>(ws: WebSocket, cb: FunctionInTuringClinet<T, R>, arg?: T): Promise<R> {
 	return new Promise((resolve) => {
 		const randomType = `__type__${uid()}`
 		function callback(data: string) {
-			const { result, type } = JSON.parse(data) as CallbackData<T>;
+			const { result, type } = JSON.parse(data) as CallbackData<R>;
 			if (type === randomType) {
 				ws.removeListener('message', callback)
 				resolve(result)
@@ -39,10 +41,17 @@ export function execFunctionInTuringClient<T>(ws: WebSocket, cb: FunctionInTurin
 		ws.send(JSON.stringify(
 			{
 				type: randomType,
-				function: cb.toString()
+				function: cb.toString(),
+				arg
 			}
 		))
 	})
+}
+
+export function createExecFunctionInTuringClientProxy(ws: WebSocket) {
+	return <T, R>(arg: T, cb: FunctionInTuringClinet<T, R>) => {
+		return execFunctionInTuringClient<T, R>(ws, cb, arg)
+	}
 }
 
 export function createTuringClient(dllPath: string, exePath: string = exe): Promise<WebSocket> {
@@ -56,7 +65,7 @@ export function createTuringClient(dllPath: string, exePath: string = exe): Prom
 				connected = true
 				resolve(ws)
 			});
-			const client = exec(`${exe} --port ${port} --dll ${dllPath}`)
+			const client = exec(`${exePath} --port ${port} --dll ${dllPath}`)
 			client.stdout.on('data', chun => {
 				console.log(chun.toString())
 			})

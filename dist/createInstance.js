@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createTuringClient = exports.execFunctionInTuringClient = void 0;
+exports.createTuringClient = exports.createExecFunctionInTuringClientProxy = exports.execFunctionInTuringClient = void 0;
 const WebSocket = require("ws");
 const portfinder_1 = require("portfinder");
 const child_process_1 = require("child_process");
@@ -19,7 +19,7 @@ const exe = resolve(__dirname, '../prebuild/turing.exe');
 let connected = false;
 let ws = null;
 let wss = null;
-function execFunctionInTuringClient(ws, cb) {
+function execFunctionInTuringClient(ws, cb, arg) {
     return new Promise((resolve) => {
         const randomType = `__type__${(0, uid_1.uid)()}`;
         function callback(data) {
@@ -32,11 +32,18 @@ function execFunctionInTuringClient(ws, cb) {
         ws.addListener('message', callback);
         ws.send(JSON.stringify({
             type: randomType,
-            function: cb.toString()
+            function: cb.toString(),
+            arg
         }));
     });
 }
 exports.execFunctionInTuringClient = execFunctionInTuringClient;
+function createExecFunctionInTuringClientProxy(ws) {
+    return (arg, cb) => {
+        return execFunctionInTuringClient(ws, cb, arg);
+    };
+}
+exports.createExecFunctionInTuringClientProxy = createExecFunctionInTuringClientProxy;
 function createTuringClient(dllPath, exePath = exe) {
     return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
         if (!connected) {
@@ -48,7 +55,7 @@ function createTuringClient(dllPath, exePath = exe) {
                 connected = true;
                 resolve(ws);
             });
-            const client = (0, child_process_1.exec)(`${exe} --port ${port} --dll ${dllPath}`);
+            const client = (0, child_process_1.exec)(`${exePath} --port ${port} --dll ${dllPath}`);
             client.stdout.on('data', chun => {
                 console.log(chun.toString());
             });
