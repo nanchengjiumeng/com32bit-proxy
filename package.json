@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "@types/ws": "^8.2.3",
-    "dm.dll": "^1.1.0",
     "portfinder": "^1.0.28",
     "uid": "^2.0.0",
     "ws": "^8.5.0"
