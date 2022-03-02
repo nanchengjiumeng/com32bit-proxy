@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import { ChildProcess } from 'child_process';
-import { Turing } from '../types/turing';
+import { ChildProcess } from "child_process";
+import { Turing } from "../types/turing";
 interface FunctionInTuringClinet<T, R = any> {
     (args: T, TURING?: Turing, createDllBridge?: (dllPath: string) => void): R;
 }

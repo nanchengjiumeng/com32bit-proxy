@@ -1,5 +1,4 @@
 const { program } = require('commander');
-const { WebSocket } = require('ws');
 const { execSync } = require('child_process');
 
 program
@@ -23,6 +22,8 @@ function createDllBridge(dllPath) {
 }
 
 const TURING = createDllBridge(dllPath)
+
+console.log(TURING.Version())
 
 process.stdin.on('data', async (json) => {
 	const data = JSON.parse(json)
