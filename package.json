@@ -2,14 +2,14 @@
   "name": "turing-exp",
   "version": "1.0.1",
   "description": "",
-  "main": "./dist/createInstance",
+  "main": "./dist/createInstance.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "tsc --watch",
     "build": "node .\\scripts\\build.js && tsc"
   },
   "author": "",
-  "typings": "dist/turing.d.ts",
+  "types": "src/createInstance.ts",
   "license": "ISC",
   "dependencies": {
     "uid": "^2.0.0"
