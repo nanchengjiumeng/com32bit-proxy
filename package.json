@@ -1,6 +1,6 @@
 {
   "name": "turing-exp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "./dist/createInstance",
   "scripts": {
@@ -12,10 +12,7 @@
   "typings": "dist/turing.d.ts",
   "license": "ISC",
   "dependencies": {
-    "@types/ws": "^8.2.3",
-    "portfinder": "^1.0.28",
-    "uid": "^2.0.0",
-    "ws": "^8.5.0"
+    "uid": "^2.0.0"
   },
   "devDependencies": {
     "fs-extra": "^10.0.0",
