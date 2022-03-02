@@ -5,7 +5,7 @@ const turingProxy = new TuringProxy("D:/turing308/TURING/TURING.dll")
 
 
 turingProxy.exec(null, (arg, Turing) => {
-	return Turing.abc()
+	return Turing.version()
 }).then(version => {
 	console.log(version)
 }).catch(e => {

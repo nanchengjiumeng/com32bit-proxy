@@ -23,8 +23,6 @@ function createDllBridge(dllPath) {
 
 const TURING = createDllBridge(dllPath)
 
-console.log(TURING.Version())
-
 process.stdin.on('data', async (json) => {
 	const data = JSON.parse(json)
 	const template = `(${data.function})(data.arg, TURING, createDllBridge);`;
@@ -32,6 +30,7 @@ process.stdin.on('data', async (json) => {
 		const result = await eval(template)
 		process.stdout.write(JSON.stringify({ type: data.type, result }))
 	} catch (e) {
+		console.log(e)
 		process.stderr.write(JSON.stringify({
 			type: data.type,
 			result: e.toString()
