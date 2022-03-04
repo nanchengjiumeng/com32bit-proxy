@@ -2,14 +2,14 @@
   "compilerOptions": {
     "module": "CommonJS",
     "target": "ES6",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "removeComments": false,
     "preserveConstEnums": true,
     "sourceMap": true,
     "outDir": "dist",
-    "declaration": true
+    "declaration": true,
   },
   "files": [
     "src/createInstance"
-  ]
+  ],
 }

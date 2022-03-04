@@ -10,6 +10,7 @@ import Files from './modules/files';
 import CR from './modules/cr/cr.d';
 import Hwnd from './modules/hwnd.d'
 import KM from './modules/km.d'
+
 export interface Turing extends
 	Hwnd,
 	CR,

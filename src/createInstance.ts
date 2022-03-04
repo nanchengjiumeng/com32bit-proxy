@@ -1,9 +1,23 @@
 import { ChildProcess, exec } from "child_process";
 import { uid } from "uid";
+import { existsSync } from "fs";
+import { resolve } from "path";
 import { Turing } from "../types/turing";
-const { resolve } = require("path");
 
-const exe = resolve(__dirname, "../prebuild/turing.exe");
+import download = require("download");
+import os = require("os");
+import {
+  cur_prebuild,
+  cur_prebuild_version,
+  dllTuring,
+  exeTuring,
+  files,
+  nodeActivex,
+} from "./prebuild";
+
+const vdir = `v${cur_prebuild_version}`;
+const basedir = resolve(os.homedir(), ".turing");
+const dirUnpack = resolve(basedir, vdir);
 
 interface FunctionInTuringClinet<T, R = any> {
   (
@@ -12,16 +26,18 @@ interface FunctionInTuringClinet<T, R = any> {
     createDllBridge?: (dllPath: string) => void,
   ): R;
 }
+
 interface CallbackData<T> {
   type: string;
   result: T;
 }
 export class TuringProxy {
   public execProcess: ChildProcess;
+  public static version: string = cur_prebuild_version;
   constructor(
-    dllTuringPath: string,
-    exeTuringPath: string = exe,
-    nodeWinaxPath?: string,
+    dllTuringPath: string = resolve(dirUnpack, dllTuring),
+    exeTuringPath: string = resolve(dirUnpack, exeTuring),
+    nodeWinaxPath: string = resolve(dirUnpack, nodeActivex),
   ) {
     this.execProcess = TuringProxy.createTuringClient(
       dllTuringPath,
@@ -32,13 +48,11 @@ export class TuringProxy {
 
   public static createTuringClient(
     dllTuringPath: string,
-    exeTuringPath: string = exe,
-    nodeWinaxPath?: string,
+    exeTuringPath: string,
+    nodeWinaxPath: string,
   ): ChildProcess {
     const client = exec(
-      `${exeTuringPath} --dll ${dllTuringPath}${
-        nodeWinaxPath ? ` --winax ${nodeWinaxPath}` : ""
-      }`,
+      `${exeTuringPath} --dll ${dllTuringPath} --winax ${nodeWinaxPath}`,
     );
 
     return client;
@@ -86,5 +100,46 @@ export class TuringProxy {
       cb,
       arg,
     );
+  }
+
+  // 下载预编译文件到.turing
+  public static async downloadPrebuildFiles(
+    progressCallback?: (
+      _args: {
+        filename: string;
+        current: number;
+        all: number;
+        start: boolean;
+        end: boolean;
+      },
+    ) => void,
+  ) {
+    // 检验文件完整性
+    let integrity = true;
+    for (let i = 0; i < files.length; i++) {
+      const exisit = existsSync(resolve(dirUnpack, files[i]));
+      if (!exisit) {
+        integrity = false;
+        break;
+      }
+    }
+    if (!integrity) {
+      // 如果缺少文件,下载最新.zip
+      if (progressCallback) {
+        progressCallback({
+          filename: vdir + ".zip",
+          current: 0,
+          all: 1,
+          start: true,
+          end: false,
+        });
+      }
+      const url = cur_prebuild.zip;
+
+      await download(url, basedir, { extract: true });
+      // 解压zip
+      // zipSteam;
+      // compressing.zip.UncompressStream();
+    }
   }
 }
