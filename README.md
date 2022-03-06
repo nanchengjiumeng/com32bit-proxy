@@ -9,10 +9,10 @@ const { TuringProxy } = require("turing-exp");
 
 const tp = new  TuringProxy()
 
-tp.exec(null, function (n, Turing) {
-  return Turing.Version();
-}).then((v) => {
-  console.log(v); // 3.0.8.20220210
+tp.exec(null, (context) => {
+	return context.TURING.version()
+}).then(version => {
+	console.log(version) // 3.0.8.20220210
 });
 ```
 

@@ -8,8 +8,6 @@ turingProxy.exec(null, (context) => {
 	return context.TURING.version()
 }).then(version => {
 	console.log(version)
-}).catch(e => {
-	console.log(e)
 })
 
 // const ws = await createTuringClient("D:/turing308/TURING/TURING.dll")
