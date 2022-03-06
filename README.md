@@ -30,3 +30,9 @@ TuringProxy.version  // v1.0.1
 ```
 
 下载不到的时, 可根据`version`自行放置
+
+## changelog
+
+### 1.0.2 
+
+1. 变更`exec`的参数 

@@ -2,7 +2,11 @@
 import { ChildProcess } from "child_process";
 import { Turing } from "../types/turing";
 interface FunctionInTuringClinet<T, R = any> {
-    (args: T, TURING?: Turing, createDllBridge?: (dllPath: string) => void): R;
+    (context: {
+        args: T;
+        TURING: Turing;
+        createDllBridge: (dllPath: string) => void;
+    }): R;
 }
 export declare class TuringProxy {
     execProcess: ChildProcess;

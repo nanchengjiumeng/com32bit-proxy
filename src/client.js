@@ -25,7 +25,7 @@ const TURING = createDllBridge(dllPath)
 
 process.stdin.on('data', async (json) => {
 	const data = JSON.parse(json)
-	const template = `(${data.function})(data.arg, TURING, createDllBridge);`;
+	const template = `(${data.function})({args:data.arg, TURING, createDllBridge});`;
 	try {
 		const result = await eval(template)
 		process.stdout.write(JSON.stringify({ type: data.type, result }))

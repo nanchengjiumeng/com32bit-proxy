@@ -21,9 +21,11 @@ const dirUnpack = resolve(basedir, vdir);
 
 interface FunctionInTuringClinet<T, R = any> {
   (
-    args: T,
-    TURING?: Turing,
-    createDllBridge?: (dllPath: string) => void,
+    context: {
+      args: T;
+      TURING: Turing;
+      createDllBridge: (dllPath: string) => void;
+    },
   ): R;
 }
 
