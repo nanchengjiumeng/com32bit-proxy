@@ -6,6 +6,7 @@ interface FunctionInTuringClinet<T, R = any> {
 }
 export declare class TuringProxy {
     execProcess: ChildProcess;
+    static version: string;
     constructor(dllTuringPath?: string, exeTuringPath?: string, nodeWinaxPath?: string);
     static createTuringClient(dllTuringPath: string, exeTuringPath: string, nodeWinaxPath: string): ChildProcess;
     static execFunctionInTuringClient<T, R>(ep: ChildProcess, cb: FunctionInTuringClinet<T, R>, arg?: T): Promise<R>;

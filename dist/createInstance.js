@@ -90,4 +90,5 @@ class TuringProxy {
     }
 }
 exports.TuringProxy = TuringProxy;
+TuringProxy.version = prebuild_1.cur_prebuild_version;
 //# sourceMappingURL=createInstance.js.map

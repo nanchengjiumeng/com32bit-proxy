@@ -1,2 +1,5 @@
+release
 node_modules/
 package-lock.json
+prebuild/node_activex.node
+prebuild/turing.exe
