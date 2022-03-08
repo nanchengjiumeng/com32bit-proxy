@@ -1,14 +1,12 @@
 export const exeTuring = "turing.exe";
-export const dllTuring = "TURING.dll";
 export const nodeActivex = "node_activex.node";
-export const files = [nodeActivex, dllTuring, exeTuring];
+export const files = [nodeActivex, exeTuring];
 export const cur_prebuild_version = "1.0.2";
 export const versions = [
   {
     version: cur_prebuild_version,
     zip:
-      "https://github.com/nanchengjiumeng/com32bit-proxy/releases/download/v1.0.1/v1.0.1.zip",
-    // "https://test-ebook1.oss-cn-beijing.aliyuncs.com/test-fe/v1.0.1.zip",
+      `https://github.com/nanchengjiumeng/com32bit-proxy/releases/download/v${cur_prebuild_version}/v${cur_prebuild_version}.zip`,
   },
 ];
 export const cur_prebuild = versions.find((v) =>

@@ -1,20 +1,19 @@
 /// <reference types="node" />
 import { ChildProcess } from "child_process";
-import { Turing } from "../types/turing";
-interface FunctionInTuringClinet<T, R = any> {
+interface FunctionInTuringClinet<T, R, E> {
     (context: {
         args: T;
-        TURING: Turing;
-        createDllBridge: (dllPath: string) => void;
+        env: E;
+        createDllBridge: (dllPath: string, objectName: string) => void;
     }): R;
 }
 export declare class TuringProxy {
     execProcess: ChildProcess;
     static version: string;
-    constructor(dllTuringPath?: string, exeTuringPath?: string, nodeWinaxPath?: string);
-    static createTuringClient(dllTuringPath: string, exeTuringPath: string, nodeWinaxPath: string): ChildProcess;
-    static execFunctionInTuringClient<T, R>(ep: ChildProcess, cb: FunctionInTuringClinet<T, R>, arg?: T): Promise<R>;
-    exec<ResultType, ArgumentsType = void>(arg: ArgumentsType, cb: FunctionInTuringClinet<ArgumentsType, ResultType>): Promise<ResultType>;
+    constructor(exeTuringPath?: string, nodeWinaxPath?: string);
+    static createTuringClient(exeTuringPath: string, nodeWinaxPath: string): ChildProcess;
+    static execFunctionInTuringClient<T, R = any, E = Record<string, any>>(ep: ChildProcess, cb: FunctionInTuringClinet<T, R, E>, arg?: T): Promise<R>;
+    exec<ResultType, ArgumentsType = any, EnvType = Record<string, any>>(arg: ArgumentsType, cb: FunctionInTuringClinet<ArgumentsType, ResultType, EnvType>): Promise<ResultType>;
     static downloadPrebuildFiles(progressCallback?: (_args: {
         filename: string;
         current: number;

@@ -1,11 +1,18 @@
+const path = require('path')
 const { TuringProxy } = require('../dist/createInstance')
 const n = 1080
 
-const turingProxy = new TuringProxy("D:/turing308/TURING/TURING.dll")
+const dlpath = "D:/turing308/TURING/TURING.dll"
+const turingProxy = new TuringProxy(
+	path.resolve(__dirname, "../prebuild/turing.exe"),
+	path.resolve(__dirname,  "../prebuild/node_activex.node")
+	)
 
 
-turingProxy.exec(null, (context) => {
-	return context.TURING.version()
+turingProxy.exec({dlpath, name: 'TURING.FISR'}, (context) => {
+	context.env.TURING = context.createDllBridge(context.args.dlpath, context.args.name)
+}).then(()=>{
+	return turingProxy.exec(null, (context)=>context.env.TURING.Version())
 }).then(version => {
 	console.log(version)
 })

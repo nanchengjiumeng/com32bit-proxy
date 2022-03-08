@@ -21,11 +21,11 @@ const vdir = `v${prebuild_1.cur_prebuild_version}`;
 const basedir = (0, path_1.resolve)(os.homedir(), ".turing");
 const dirUnpack = (0, path_1.resolve)(basedir, vdir);
 class TuringProxy {
-    constructor(dllTuringPath = (0, path_1.resolve)(dirUnpack, prebuild_1.dllTuring), exeTuringPath = (0, path_1.resolve)(dirUnpack, prebuild_1.exeTuring), nodeWinaxPath = (0, path_1.resolve)(dirUnpack, prebuild_1.nodeActivex)) {
-        this.execProcess = TuringProxy.createTuringClient(dllTuringPath, exeTuringPath, nodeWinaxPath);
+    constructor(exeTuringPath = (0, path_1.resolve)(dirUnpack, prebuild_1.exeTuring), nodeWinaxPath = (0, path_1.resolve)(dirUnpack, prebuild_1.nodeActivex)) {
+        this.execProcess = TuringProxy.createTuringClient(exeTuringPath, nodeWinaxPath);
     }
-    static createTuringClient(dllTuringPath, exeTuringPath, nodeWinaxPath) {
-        const client = (0, child_process_1.exec)(`${exeTuringPath} --dll ${dllTuringPath} --winax ${nodeWinaxPath}`);
+    static createTuringClient(exeTuringPath, nodeWinaxPath) {
+        const client = (0, child_process_1.exec)(`${exeTuringPath}  --winax ${nodeWinaxPath}`);
         return client;
     }
     static execFunctionInTuringClient(ep, cb, arg) {

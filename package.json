@@ -1,6 +1,6 @@
 {
-  "name": "turing-exp",
-  "version": "1.0.2",
+  "name": "com32bit-proxy",
+  "version": "1.0.3",
   "description": "",
   "main": "./dist/createInstance.js",
   "scripts": {

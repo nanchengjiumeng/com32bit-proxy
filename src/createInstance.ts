@@ -2,29 +2,27 @@ import { ChildProcess, exec } from "child_process";
 import { uid } from "uid";
 import { existsSync } from "fs";
 import { resolve } from "path";
-import { Turing } from "../types/turing";
 
 import download = require("download");
 import os = require("os");
 import {
   cur_prebuild,
   cur_prebuild_version,
-  dllTuring,
   exeTuring,
   files,
   nodeActivex,
 } from "./prebuild";
 
 const vdir = `v${cur_prebuild_version}`;
-const basedir = resolve(os.homedir(), ".turing");
+const basedir = resolve(os.homedir(), ".com32bit-proxy");
 const dirUnpack = resolve(basedir, vdir);
 
-interface FunctionInTuringClinet<T, R = any> {
+interface FunctionInTuringClinet<T, R , E> {
   (
     context: {
       args: T;
-      TURING: Turing;
-      createDllBridge: (dllPath: string) => void;
+      env: E;
+      createDllBridge: (dllPath: string, objectName:string) => void;
     },
   ): R;
 }
@@ -37,32 +35,29 @@ export class TuringProxy {
   public execProcess: ChildProcess;
   public static version: string = cur_prebuild_version;
   constructor(
-    dllTuringPath: string = resolve(dirUnpack, dllTuring),
     exeTuringPath: string = resolve(dirUnpack, exeTuring),
     nodeWinaxPath: string = resolve(dirUnpack, nodeActivex),
   ) {
     this.execProcess = TuringProxy.createTuringClient(
-      dllTuringPath,
       exeTuringPath,
       nodeWinaxPath,
     );
   }
 
   public static createTuringClient(
-    dllTuringPath: string,
     exeTuringPath: string,
     nodeWinaxPath: string,
   ): ChildProcess {
     const client = exec(
-      `${exeTuringPath} --dll ${dllTuringPath} --winax ${nodeWinaxPath}`,
+      `${exeTuringPath}  --winax ${nodeWinaxPath}`,
     );
 
     return client;
   }
 
-  public static execFunctionInTuringClient<T, R>(
+  public static execFunctionInTuringClient<T, R = any, E = Record<string, any>>(
     ep: ChildProcess,
-    cb: FunctionInTuringClinet<T, R>,
+    cb: FunctionInTuringClinet<T, R, E>,
     arg?: T,
   ): Promise<R> {
     return new Promise((resolve, reject) => {
@@ -93,11 +88,11 @@ export class TuringProxy {
     });
   }
 
-  public exec<ResultType, ArgumentsType = void>(
+  public exec<ResultType, ArgumentsType = any, EnvType =  Record<string, any>>(
     arg: ArgumentsType,
-    cb: FunctionInTuringClinet<ArgumentsType, ResultType>,
+    cb: FunctionInTuringClinet<ArgumentsType, ResultType, EnvType>,
   ) {
-    return TuringProxy.execFunctionInTuringClient<ArgumentsType, ResultType>(
+    return TuringProxy.execFunctionInTuringClient<ArgumentsType, ResultType, EnvType>(
       this.execProcess,
       cb,
       arg,
