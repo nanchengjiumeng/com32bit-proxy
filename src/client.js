@@ -4,7 +4,7 @@ const { execSync } = require('child_process');
 program
 	// .option('-d, --dll <path>', 'turing dll path')
 	.option('-w, --winax <winax>', 'winax node')
-// program.parse(process.argv)
+program.parse(process.argv)
 
 const options = program.opts();
 const dllPath = options.dll
