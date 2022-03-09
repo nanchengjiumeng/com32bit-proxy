@@ -17,16 +17,16 @@ const vdir = `v${cur_prebuild_version}`;
 const basedir = resolve(os.homedir(), ".com32bit-proxy");
 const dirUnpack = resolve(basedir, vdir);
 
-interface CreateDllBridge<R>{
-  (dllPath: string, objectName:string):R
+interface CreateDllBridge<R> {
+  (dllPath: string, objectName: string): R
 }
 
-interface FunctionInTuringClinet<T, R , E> {
+interface FunctionInTuringClinet<T, R, E> {
   (
     context: {
       args: T;
       env: E;
-      createDllBridge: (dllPath: string, objectName:string) => any;
+      createDllBridge: (dllPath: string, objectName: string) => any;
     },
   ): R;
 }
@@ -35,7 +35,7 @@ interface CallbackData<T> {
   type: string;
   result: T;
 }
-export class TuringProxy {
+export class TuringProxy<Env = Record<string, any>> {
   public execProcess: ChildProcess;
   public static version: string = cur_prebuild_version;
   constructor(
@@ -92,7 +92,7 @@ export class TuringProxy {
     });
   }
 
-  public exec<ResultType, ArgumentsType = any, EnvType =  Record<string, any>>(
+  public exec<ResultType, ArgumentsType = any, EnvType = Env>(
     arg: ArgumentsType,
     cb: FunctionInTuringClinet<ArgumentsType, ResultType, EnvType>,
   ) {
