@@ -26,13 +26,12 @@ const env = {
 }
 
 process.stdin.on('data', async (json) => {
-	const data = JSON.parse(json)
-	const template = `(${data.function})({args:data.arg, createDllBridge, env});`;
 	try {
+		const data = JSON.parse(json)
+		const template = `(${data.function})({args:data.arg, createDllBridge, env});`;
 		const result = await eval(template)
 		process.stdout.write(JSON.stringify({ type: data.type, result }))
 	} catch (e) {
-		console.log(e)
 		process.stderr.write(JSON.stringify({
 			type: data.type,
 			result: e.toString()

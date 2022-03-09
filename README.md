@@ -6,7 +6,6 @@
 ```js
 // 获得turing插件的版本
 const { TuringProxy } = require("com32bit-proxy");
-
 const tp = new TuringProxy()
 
 const dlpath = "D:/turing308/TURING/TURING.dll"
