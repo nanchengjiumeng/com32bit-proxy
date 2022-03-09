@@ -18,7 +18,7 @@ const download = require("download");
 const os = require("os");
 const prebuild_1 = require("./prebuild");
 const vdir = `v${prebuild_1.cur_prebuild_version}`;
-const basedir = (0, path_1.resolve)(os.homedir(), ".turing");
+const basedir = (0, path_1.resolve)(os.homedir(), ".com32bit-proxy");
 const dirUnpack = (0, path_1.resolve)(basedir, vdir);
 class TuringProxy {
     constructor(exeTuringPath = (0, path_1.resolve)(dirUnpack, prebuild_1.exeTuring), nodeWinaxPath = (0, path_1.resolve)(dirUnpack, prebuild_1.nodeActivex)) {

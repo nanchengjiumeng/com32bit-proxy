@@ -4,7 +4,7 @@ interface FunctionInTuringClinet<T, R, E> {
     (context: {
         args: T;
         env: E;
-        createDllBridge: (dllPath: string, objectName: string) => void;
+        createDllBridge: (dllPath: string, objectName: string) => any;
     }): R;
 }
 export declare class TuringProxy {

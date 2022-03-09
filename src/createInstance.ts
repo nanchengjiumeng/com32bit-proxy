@@ -17,12 +17,16 @@ const vdir = `v${cur_prebuild_version}`;
 const basedir = resolve(os.homedir(), ".com32bit-proxy");
 const dirUnpack = resolve(basedir, vdir);
 
+interface CreateDllBridge<R>{
+  (dllPath: string, objectName:string):R
+}
+
 interface FunctionInTuringClinet<T, R , E> {
   (
     context: {
       args: T;
       env: E;
-      createDllBridge: (dllPath: string, objectName:string) => void;
+      createDllBridge: (dllPath: string, objectName:string) => any;
     },
   ): R;
 }
