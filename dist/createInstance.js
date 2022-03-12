@@ -23,6 +23,9 @@ const dirUnpack = (0, path_1.resolve)(basedir, vdir);
 class TuringProxy {
     constructor(exeTuringPath = (0, path_1.resolve)(dirUnpack, prebuild_1.exeTuring), nodeWinaxPath = (0, path_1.resolve)(dirUnpack, prebuild_1.nodeActivex)) {
         this.execProcess = TuringProxy.createTuringClient(exeTuringPath, nodeWinaxPath);
+        this.execProcess.stderr.on('data', json => {
+            console.error(json);
+        });
     }
     static createTuringClient(exeTuringPath, nodeWinaxPath) {
         const client = (0, child_process_1.exec)(`${exeTuringPath}  --winax ${nodeWinaxPath}`);
@@ -32,17 +35,26 @@ class TuringProxy {
         return new Promise((resolve, reject) => {
             const randomType = `__type__${(0, uid_1.uid)()}`;
             function callback(data) {
-                const { result, type } = JSON.parse(data);
-                if (type === randomType) {
-                    ep.stdout.removeListener("data", callback);
-                    resolve(result);
+                const isObjectJson = /^{.+}$/.test(data);
+                if (isObjectJson) {
+                    const { result, type } = JSON.parse(data);
+                    if (type === randomType) {
+                        ep.stdout.removeListener("data", callback);
+                        resolve(result);
+                    }
+                }
+                else {
+                    reject('com32proxy exec error: success callback return un-object JSON string.');
                 }
             }
             function errCallback(data) {
-                const { result, type } = JSON.parse(data);
-                if (type === randomType) {
-                    ep.stderr.removeListener("data", errCallback);
-                    reject(result);
+                const isObjectJson = /^{.+}$/.test(data);
+                if (isObjectJson) {
+                    const { result, type } = JSON.parse(data);
+                    if (type === randomType) {
+                        ep.stderr.removeListener("data", errCallback);
+                        reject(result);
+                    }
                 }
             }
             ep.stdout.addListener("data", callback);

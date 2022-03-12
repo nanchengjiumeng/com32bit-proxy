@@ -46,6 +46,9 @@ export class TuringProxy<Env = Record<string, any>> {
       exeTuringPath,
       nodeWinaxPath,
     );
+    this.execProcess.stderr.on('data', json => {
+      console.error(json);
+    })
   }
 
   public static createTuringClient(
@@ -67,17 +70,25 @@ export class TuringProxy<Env = Record<string, any>> {
     return new Promise((resolve, reject) => {
       const randomType = `__type__${uid()}`;
       function callback(data: string) {
-        const { result, type } = JSON.parse(data) as CallbackData<R>;
-        if (type === randomType) {
-          ep.stdout.removeListener("data", callback);
-          resolve(result);
+        const isObjectJson = /^{.+}$/.test(data)
+        if (isObjectJson) {
+          const { result, type } = JSON.parse(data) as CallbackData<R>;
+          if (type === randomType) {
+            ep.stdout.removeListener("data", callback);
+            resolve(result);
+          }
+        }else{
+          reject('com32proxy exec error: success callback return un-object JSON string.')
         }
       }
       function errCallback(data: string) {
-        const { result, type } = JSON.parse(data) as CallbackData<R>;
-        if (type === randomType) {
-          ep.stderr.removeListener("data", errCallback);
-          reject(result);
+        const isObjectJson = /^{.+}$/.test(data)
+        if (isObjectJson) {
+          const { result, type } = JSON.parse(data) as CallbackData<R>;
+          if (type === randomType) {
+            ep.stderr.removeListener("data", errCallback);
+            reject(result);
+          }
         }
       }
       ep.stdout.addListener("data", callback);
