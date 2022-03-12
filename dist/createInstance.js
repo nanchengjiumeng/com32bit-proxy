@@ -44,7 +44,8 @@ class TuringProxy {
                     }
                 }
                 else {
-                    reject('com32proxy exec error: success callback return un-object JSON string.');
+                    process.stdout.write(data);
+                    // reject('com32proxy exec error: success callback return un-object JSON string.')
                 }
             }
             function errCallback(data) {

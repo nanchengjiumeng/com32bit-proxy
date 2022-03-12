@@ -8,8 +8,8 @@ const turingProxy = new TuringProxy(
 	path.resolve(__dirname,  "../prebuild/node_activex.node")
 	)
 
-
-turingProxy.exec({dlpath, name: 'TURING.FISR'}, (context) => {
+turingProxy.exec({dlpath, name: 'TURING.FISR', n}, (context) => {
+	console.log(context.args.n)
 	context.env.TURING = context.createDllBridge(context.args.dlpath, context.args.name)
 }).then(()=>{
 	return turingProxy.exec(null, (context)=>context.env.TURING.Version())

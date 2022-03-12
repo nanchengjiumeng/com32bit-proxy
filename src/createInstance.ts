@@ -17,10 +17,6 @@ const vdir = `v${cur_prebuild_version}`;
 const basedir = resolve(os.homedir(), ".com32bit-proxy");
 const dirUnpack = resolve(basedir, vdir);
 
-interface CreateDllBridge<R> {
-  (dllPath: string, objectName: string): R
-}
-
 interface FunctionInTuringClinet<T, R, E> {
   (
     context: {
@@ -78,7 +74,8 @@ export class TuringProxy<Env = Record<string, any>> {
             resolve(result);
           }
         }else{
-          reject('com32proxy exec error: success callback return un-object JSON string.')
+          process.stdout.write(data);
+          // reject('com32proxy exec error: success callback return un-object JSON string.')
         }
       }
       function errCallback(data: string) {
