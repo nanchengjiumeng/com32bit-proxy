@@ -6,7 +6,7 @@ const { resolve } = require("path");
 // const sub = fork(resolve(__dirname,  '../src/client'))
 
 
-const sub = exec('node ./src/client.js')
+const sub = exec(`node ${resolve(__dirname, '../prebuild/turing.exe')}`)
 
 sub.stdout.on('data', e=>console.log(e))
 sub.stderr.on('data', e=>console.log(e))
